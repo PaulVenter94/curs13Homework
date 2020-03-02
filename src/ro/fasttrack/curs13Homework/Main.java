@@ -1,19 +1,26 @@
 package ro.fasttrack.curs13Homework;
 
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import static ro.fasttrack.curs13Homework.DaysOfTheWeek.*;
 
 public class Main {
     public static void main(String[] args) {
-        DayPlanner planner = new DayPlanner(getList());
+        DayPlanner planner = new DayPlanner();
         try {
-            planner.addActivity(MONDAY, null);
+            planner.addActivity(MONDAY, "swim");
         } catch (NoActivityException e) {
             System.out.println(e.getMessage());
         }
         System.out.println(planner.getDay(MONDAY));
+        planner.removeActivity(MONDAY, "swim");
+        System.out.println(planner.getDay(MONDAY));
+        planner.addActivity(THURSDAY, "Box");
+        planner.addActivity(THURSDAY, "Sleep");
+        System.out.println(planner.getDay(THURSDAY));
         try {
             planner.removeActivity(TUESDAY, "Sleep");
         } catch (NoActivityException e) {
@@ -21,13 +28,12 @@ public class Main {
         }
         System.out.println(planner.getDay(TUESDAY));
         System.out.println(planner.getActivities(WEDNESDAY));
-        planner.removeActivity(THURSDAY, "Football");
-        planner.removeActivity(THURSDAY, "Cooking");
         try {
             System.out.println(planner.endPlanning());
         } catch (NoActivitiesForDayException e) {
             System.out.println(e.getMessage());
         }
+        app();
     }
 
     public static List<DaySchedule> getList() {
@@ -47,5 +53,38 @@ public class Main {
         list.add(schedule6);
         list.add(schedule7);
         return list;
+    }
+
+    public static void app() {
+        App newApp = new App();
+        Scanner scanner = new Scanner(System.in);
+        int n;
+        do {
+            System.out.println(newApp.printMenu());
+            System.out.println("Select option:");
+            n = scanner.nextInt();
+            switch (n) {
+                case 1:
+                    newApp.addActivity();
+                    break;
+                case 2:
+                    try {
+                        newApp.removeActivity();
+                    }catch (NoActivityException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 3:
+                    System.out.println(newApp.getActivities());
+                    break;
+                case 4:
+                    try {
+                        System.out.println(newApp.endPlanning());
+                    } catch (NoActivitiesForDayException e) {
+                        e.getMessage();
+                    }
+                    break;
+            }
+        } while (n != 4);
     }
 }

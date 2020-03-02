@@ -1,5 +1,6 @@
 package ro.fasttrack.curs13Homework;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +12,21 @@ public class DayPlanner {
         this.list = list;
     }
 
+    public DayPlanner() {
+        this.list = new ArrayList<>();
+    }
+
     public void addActivity(DaysOfTheWeek days, String activity) {
+        boolean dayExists = false;
         if (activity != null) {
             for (DaySchedule schedule : list) {
                 if (schedule.getDay().equals(days)) {
                     schedule.getActivities().add(activity);
+                    dayExists = true;
                 }
+            }
+            if (!dayExists) {
+                list.add(new DaySchedule(days, new ArrayList<>(List.of(activity))));
             }
         } else {
             throw new NoActivityException();
@@ -39,7 +49,7 @@ public class DayPlanner {
                 return schedule.getActivities();
             }
         }
-        return null;
+        return new ArrayList<>(List.of("No activities for "+days));
     }
 
     public Map<DaysOfTheWeek, List<String>> endPlanning() throws NoActivitiesForDayException {
